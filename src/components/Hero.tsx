@@ -3,21 +3,28 @@ import { motion } from "framer-motion";
 import { Search, Shield, Zap, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+
 const placeholderExamples = ["https://example.com", "https://github.com", "https://amazon.com", "https://cloudflare.com", "https://stripe.com"];
-export const Hero = () => {
+
+interface HeroProps {
+  onAnalyze: (url: string) => void;
+  isAnalyzing: boolean;
+}
+
+export const Hero = ({ onAnalyze, isAnalyzing }: HeroProps) => {
   const [url, setUrl] = useState("");
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setPlaceholderIndex(prev => (prev + 1) % placeholderExamples.length);
     }, 3000);
     return () => clearInterval(interval);
   }, []);
+
   const handleAnalyze = () => {
     if (url.trim()) {
-      setIsAnalyzing(true);
-      setTimeout(() => setIsAnalyzing(false), 2000);
+      onAnalyze(url.trim());
     }
   };
   return <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
